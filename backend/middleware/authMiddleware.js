@@ -26,3 +26,7 @@ export const authMiddleware = async (req, res, next) => {
     return res.status(401).json({ message: "Invalid token" });
   }
 };
+
+export const generateToken = (userId) => {
+  return jwt.sign({ id: userId }, SECRET, { expiresIn: "12h" });
+};
