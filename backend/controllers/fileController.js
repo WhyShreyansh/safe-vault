@@ -184,3 +184,27 @@ export const downloadFile = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+// SOFT DELETE
+export const deleteFile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.params;
+
+    const file = await File.findById(id);
+
+    if (!file || file.userId.toString() !== userId) {
+      return res.status(404).json({ message: "File not found" });
+    }
+
+    file.isDeleted = true;
+    file.deletedAt = new Date();
+    file.isLatest = false;
+    await file.save();
+
+    return res.json({ message: "File soft-deleted", file });
+  } catch (error) {
+    console.error("Delete file error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
