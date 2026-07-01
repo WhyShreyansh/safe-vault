@@ -111,3 +111,15 @@ export const uploadFile = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+// GET ALL FILES
+export const getAllFiles = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const files = await File.find({ userId }).sort({ createdAt: -1 });
+    return res.json({ files });
+  } catch (error) {
+    console.error("Get files error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
