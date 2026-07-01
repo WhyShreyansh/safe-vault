@@ -208,3 +208,32 @@ export const deleteFile = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+// RESTORE FILE
+export const restoreFile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.params;
+
+    const file = await File.findById(id);
+
+    if (!file || file.userId.toString() !== userId) {
+      return res.status(404).json({ message: "File not found" });
+    }
+
+    await File.updateMany(
+      { userId, originalName: file.originalName },
+      { $set: { isLatest: false } }
+    );
+
+    file.isDeleted = false;
+    file.deletedAt = null;
+    file.isLatest = true;
+    await file.save();
+
+    return res.json({ message: "File restored", file });
+  } catch (error) {
+    console.error("Restore file error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
