@@ -159,3 +159,28 @@ export const getFileByIdRoute = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+// DOWNLOAD FILE
+export const downloadFile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.params;
+
+    const file = await File.findById(id);
+
+    if (!file || file.userId.toString() !== userId) {
+      return res.status(404).json({ message: "File not found" });
+    }
+
+    const filePath = path.join(uploadsDir, file.filename);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ message: "File missing" });
+    }
+
+    return res.download(filePath, file.originalName);
+  } catch (error) {
+    console.error("Download error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
