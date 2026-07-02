@@ -264,3 +264,21 @@ export const deletePermanent = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+// GET VERSIONS BY FILENAME
+export const getVersions = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { filename } = req.params;
+
+    const versions = await File.find({
+      userId,
+      originalName: filename,
+    }).sort({ version: 1 });
+
+    return res.json({ versions });
+  } catch (error) {
+    console.error("Get versions error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
