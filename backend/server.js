@@ -37,3 +37,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/files", fileRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/logs", logRoutes);
+
+// Test route
+app.get("/", (req, res) => {
+  res.json({ message: "SafeVault backend running" });
+});
