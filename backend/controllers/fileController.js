@@ -237,3 +237,30 @@ export const restoreFile = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+// PERMANENT DELETE
+export const deletePermanent = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.params;
+
+    const file = await File.findById(id);
+
+    if (!file || file.userId.toString() !== userId) {
+      return res.status(404).json({ message: "File not found" });
+    }
+
+    const filePath = path.join(uploadsDir, file.filename);
+
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    await File.findByIdAndDelete(id);
+
+    return res.json({ message: "File permanently deleted" });
+  } catch (error) {
+    console.error("Permanent delete error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
