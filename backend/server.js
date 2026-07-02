@@ -25,3 +25,9 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected ✅"))
   .catch((err) => console.log("MongoDB error:", err));
+
+// Ensure local files exist
+ensureDataFiles();
+
+// Static uploads folder
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
