@@ -85,23 +85,6 @@ export const getFileByIdRoute = async (req, res) => {
     console.error("Get file by id error:", error);
     return res.status(500).json({ message: "Server error" });
   }
-};// GET FILE BY ID
-export const getFileByIdRoute = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const { id } = req.params;
-
-    const file = await File.findById(id);
-
-    if (!file || file.userId.toString() !== userId) {
-      return res.status(404).json({ message: "File not found" });
-    }
-
-    return res.json({ file });
-  } catch (error) {
-    console.error("Get file by id error:", error);
-    return res.status(500).json({ message: "Server error" });
-  }
 };
 
 // DOWNLOAD FILE
