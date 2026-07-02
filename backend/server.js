@@ -48,3 +48,8 @@ app.use((err, req, res, next) => {
   console.error("Unhandled error:", err);
   res.status(500).json({ message: err.message || "Server error" });
 });
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`SafeVault backend running on http://localhost:${PORT}`);
+});
