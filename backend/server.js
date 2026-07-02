@@ -31,3 +31,9 @@ ensureDataFiles();
 
 // Static uploads folder
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/files", fileRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/logs", logRoutes);
